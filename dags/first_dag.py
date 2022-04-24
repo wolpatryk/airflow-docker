@@ -45,7 +45,7 @@ def function_2(ti):
     print('create file in custom folder')
 
     custom_folder = 'first_dag_output'
-    custom_folder_path = f"/opt/airflow/airlflowdump/{custom_folder}"
+    custom_folder_path = f"/opt/airflow/airflowdump/{custom_folder}"
     Path(custom_folder_path).mkdir(parents=True, exist_ok=True)
 
     with open(f'{custom_folder_path}/data{str(datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S"))}.json', 'w') as f:
