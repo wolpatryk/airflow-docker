@@ -9,6 +9,9 @@ dev/*
 logs/*
 !logs/manual.txt
 
+airflowdump/*
+!airflowdump/manual.txt
+
 
 # vscode section 
 .vscode/*

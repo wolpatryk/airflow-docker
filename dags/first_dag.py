@@ -1,13 +1,13 @@
-import pendulum
 import sys
+import json
+import pendulum
+import datetime
 
-from pprint import pprint
+from pathlib import Path
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.decorators import task
-
-from selenium import webdriver
 
 from defs.custom_library import custom_function
 
@@ -42,17 +42,29 @@ def function_2(ti):
     print(full_dict)
     print('@'*40)
 
+    print('create file in custom folder')
+
+    custom_folder = 'first_dag_output'
+    custom_folder_path = f"/opt/airflow/airlflowdump/{custom_folder}"
+    Path(custom_folder_path).mkdir(parents=True, exist_ok=True)
+
+    with open(f'{custom_folder_path}/data{str(datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S"))}.json', 'w') as f:
+        f.write(json.dumps(full_dict))
+    print('done')
+    print('@'*40)
+
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
+    'catchup_by_default': False,
 }
 
 with DAG(
     # [BEGIN DAG CONFIG]
     dag_id='first_dag',
-    schedule_interval='*/5 * * * * *',
-    start_date=pendulum.datetime(2021, 4, 23, tz="Europe/Warsaw"),
+    schedule_interval='*/1 * * * *',
+    start_date=pendulum.datetime(2022, 4, 24, tz="Europe/Warsaw"),
     max_active_runs=1,
     concurrency=1,
     catchup=False,
