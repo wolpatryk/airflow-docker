@@ -3,9 +3,9 @@
 ## Pobierz repo
 
 ```sh
-$ git clone https://github.com/wolpatryk/airflow-docker.git
-$ cd airflow-docker
-$ docker-compose up airflow-init
+git clone https://github.com/wolpatryk/airflow-docker.git
+cd airflow-docker
+docker-compose up airflow-init
 ```
 
 ## Konfiguracja dockera
