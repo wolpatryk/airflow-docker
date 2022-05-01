@@ -1,18 +1,13 @@
 import sys
-import json
+import os
 import pendulum
-import datetime
 
-from pathlib import Path
-
+from PIL import Image
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.decorators import task
 
 from defs.custom_library import custom_function
-
-
-# sample data to be processed
 
 data = {
     'fname': 'Patryk',
@@ -44,12 +39,23 @@ def function_2(ti):
 
     print('create file in custom folder')
 
-    custom_folder = 'first_dag_output'
-    custom_folder_path = f"/opt/airflow/airflowdump/{custom_folder}"
-    Path(custom_folder_path).mkdir(parents=True, exist_ok=True)
+    source_folder = f"/opt/airflow/images/source"
+    output_folder = f"/opt/airflow/images/ame"
 
-    with open(f'{custom_folder_path}/data{str(datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S"))}.json', 'w') as f:
-        f.write(json.dumps(full_dict))
+    print('data in transform')
+    images_to_transform = []
+    for root, dirs, files in os.walk(source_folder, topdown = True):
+        for name in files:
+            images_to_transform.append(name)
+
+    images_to_transform = [image for image in images_to_transform if image.endswith(".webp")]
+    for img in images_to_transform:
+        source_img = f"{source_folder}/{img}"
+        im = Image.open(source_img).convert("RGB")
+        output = f"{output_folder}/{img}.jpg"
+        im.save(output)
+        os.remove(source_img)
+
     print('done')
     print('@'*40)
 
@@ -63,7 +69,7 @@ default_args = {
 with DAG(
     # [BEGIN DAG CONFIG]
     dag_id='0aA_first_dag',
-    schedule_interval='*/1 * * * *',
+    schedule_interval='*/10 * * * *',
     start_date=pendulum.datetime(2022, 4, 24, tz="Europe/Warsaw"),
     max_active_runs=1,
     concurrency=1,
