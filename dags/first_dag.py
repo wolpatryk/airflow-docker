@@ -35,7 +35,7 @@ def function_1(python_dict, ti):
 def function_2(ti):
     print('@'*40)
     name_from_function_1 = ti.xcom_pull(key='testing_name')
-    name_from_function_1 = name_from_function_1 + " from function_2"
+    name_from_function_1 = name_from_function_1 + " from function_1"
     print(name_from_function_1)
     print('@'*40)
     full_dict = ti.xcom_pull(key='dict')
@@ -105,24 +105,3 @@ with DAG(
 
     debug_task = debug_function()
     # debug_task
-
-    # # [START howto_operator_python]
-    # @task(task_id="function_1")
-    # def function_1():
-    #     print('function_2')
-
-    # task_1 = function_1()
-    # # [END howto_operator_python]
-
-    # # [START howto_operator_python_kwargs]
-
-    # @task(task_id="function_2")
-    # def function_2():
-    #     print(f'function_2')
-
-    # task_2 = function_2()
-    # # [END howto_operator_python_kwargs]
-
-    # # [AIRFLOW FUNCTION RUN ORDER]
-
-    # task_1 >> task_2

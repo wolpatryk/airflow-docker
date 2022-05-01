@@ -1,2 +1,5 @@
 numpy
-selenium
+pandas
+scipy
+Plotly
+Seaborn

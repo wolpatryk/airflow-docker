@@ -31,3 +31,5 @@ airflow
 airflow
 
 localhost:5555
+
+docker-compose -f C:\Users\patryk\um\airflow\docker-compose.yaml up --force-recreate --always-recreate-deps --build airflow-init
