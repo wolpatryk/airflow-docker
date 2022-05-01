@@ -1,4 +1,5 @@
 # main airflow structure
+.gitignore
 
 plugins/*
 !plugins/manual.txt
