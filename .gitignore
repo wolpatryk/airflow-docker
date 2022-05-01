@@ -1,6 +1,4 @@
 # main airflow structure
-.gitignore
-
 plugins/*
 !plugins/manual.txt
 
@@ -29,3 +27,4 @@ airflowdump/*
 *.vsix
 
 # global stuf
+.idea
