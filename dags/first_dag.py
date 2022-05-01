@@ -52,7 +52,7 @@ def function_2(ti):
     for img in images_to_transform:
         source_img = f"{source_folder}/{img}"
         im = Image.open(source_img).convert("RGB")
-        output = f"{output_folder}/{img}.jpg"
+        output = f"{output_folder}/{img.split('.webp')[0]}.jpg"
         im.save(output)
         os.remove(source_img)
 
