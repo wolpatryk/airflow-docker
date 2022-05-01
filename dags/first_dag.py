@@ -62,7 +62,7 @@ default_args = {
 
 with DAG(
     # [BEGIN DAG CONFIG]
-    dag_id='first_dag',
+    dag_id='0aA_first_dag',
     schedule_interval='*/1 * * * *',
     start_date=pendulum.datetime(2022, 4, 24, tz="Europe/Warsaw"),
     max_active_runs=1,
