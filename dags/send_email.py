@@ -23,7 +23,7 @@ default_args = {
 with DAG(
     # [BEGIN DAG CONFIG]
     dag_id='send_email',
-    schedule_interval='0 * * * *',
+    schedule_interval=None,
     start_date=pendulum.datetime(2022, 4, 24, tz="Europe/Warsaw"),
     max_active_runs=1,
     concurrency=1,
@@ -35,12 +35,14 @@ with DAG(
 
     # [START fun_1]
 
+
     fun_1 = PythonOperator(
         task_id='function_1',
         python_callable=function_1
     )
 
     # [END fun_1]
+
 
     # [PIPELINE ORDER]
     fun_1
@@ -54,3 +56,5 @@ with DAG(
 
     debug_task = debug_function()
     # debug_task
+
+

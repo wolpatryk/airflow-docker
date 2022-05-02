@@ -5,6 +5,7 @@ import pendulum
 from PIL import Image
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.decorators import task
 
 from defs.custom_library import custom_function
@@ -96,10 +97,17 @@ with DAG(
         python_callable=function_2,
     )
 
+    # run external DAG
+    trigger = TriggerDagRunOperator(
+        task_id = "send_email",
+        trigger_dag_id = "send_email",
+        dag = dag,
+    )
+
     # [END fun_2]
 
     # [PIPELINE ORDER]
-    fun_1 >> fun_2
+    fun_1 >> fun_2 >> trigger
 
     @task(task_id="dag_debug")
     def debug_function():
