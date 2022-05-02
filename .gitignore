@@ -11,6 +11,9 @@ logs/*
 airflowdump/*
 !airflowdump/manual.txt
 
+secrets/*
+!secrets/manual.txt
+
 
 # vscode section 
 .vscode/*

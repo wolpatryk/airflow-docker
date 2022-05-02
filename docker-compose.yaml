@@ -61,7 +61,8 @@ x-airflow-common:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
-    - /c/Users/patryk/um/airflow/airflowdump:/opt/airflow/airflowdump
+    - ./airflowdump:/opt/airflow/airflowdump
+    - ./secrets:/opt/airflow/secrets
     - "/F/Zdjęcia F/ame_webp:/opt/airflow/images/source"
     - "/F/Zdjęcia F/ame:/opt/airflow/images/ame"
 
