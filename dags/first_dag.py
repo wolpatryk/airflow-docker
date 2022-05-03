@@ -1,6 +1,9 @@
 import sys
 import os
 import pendulum
+import glob
+import uuid
+import shutil
 
 from PIL import Image
 from airflow import DAG
@@ -60,6 +63,29 @@ def function_2(ti):
     print('done')
     print('@'*40)
 
+def function_3():
+    extensions = ['.jpeg', '.JPEG', '.jpg', '.JPG', '.PNG', '.png']
+    source_dir = f"/opt/airflow/images/source"
+    output_dir = f"/opt/airflow/images/ame"
+
+    images = []
+    for root, dirs, files in os.walk(source_dir, topdown=False):
+        for name in files:
+            image_path = os.path.join(f"{root}/{name}")
+            images.append(image_path)
+    L = [f for f in os.listdir(source_dir) if os.path.splitext(f)[1] in extensions]
+    for f in L:
+        try:
+            source_file = f"{source_dir}/{f}"
+            ext = source_file.split('.')[-1]
+            shutil.move(f"{source_file}", output_dir)
+        except:
+            old_name = fr"{source_file}"
+            new_name = fr"{source_file}-{str(uuid.uuid4())}.{ext}"
+            os.rename(old_name, new_name)
+            shutil.move(f"{new_name}", output_dir)
+
+
 
 default_args = {
     'owner': 'airflow',
@@ -69,8 +95,8 @@ default_args = {
 
 with DAG(
     # [BEGIN DAG CONFIG]
-    dag_id='0aA_first_dag',
-    schedule_interval='0 */2 * * *',
+    dag_id='transform_images',
+    schedule_interval='0 * * * *',
     start_date=pendulum.datetime(2022, 4, 24, tz="Europe/Warsaw"),
     max_active_runs=1,
     concurrency=1,
@@ -97,17 +123,25 @@ with DAG(
         python_callable=function_2,
     )
 
+    # [END fun_2]
+
+    # [START fun_3]
+
+    fun_3 = PythonOperator(
+        task_id = 'function_3',
+        python_callable = function_3,
+    )
+
+    # [END fun_3]
+
     # run external DAG
     trigger = TriggerDagRunOperator(
         task_id = "send_email",
         trigger_dag_id = "send_email",
         dag = dag,
     )
-
-    # [END fun_2]
-
     # [PIPELINE ORDER]
-    fun_1 >> fun_2 >> trigger
+    fun_1 >> fun_2 >> fun_3 >> trigger
 
     @task(task_id="dag_debug")
     def debug_function():
