@@ -135,13 +135,15 @@ with DAG(
     # [END fun_3]
 
     # run external DAG
-    trigger = TriggerDagRunOperator(
-        task_id = "send_email",
-        trigger_dag_id = "send_email",
-        dag = dag,
-    )
+    # trigger = TriggerDagRunOperator(
+    #     task_id = "send_email",
+    #     trigger_dag_id = "send_email",
+    #     dag = dag,
+    # )
     # [PIPELINE ORDER]
-    fun_1 >> fun_2 >> fun_3 >> trigger
+    fun_1 >> fun_2 >> fun_3
+    # fun_1 >> fun_2 >> fun_3 >> trigger
+
 
     @task(task_id="dag_debug")
     def debug_function():
