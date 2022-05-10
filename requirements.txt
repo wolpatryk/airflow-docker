@@ -3,3 +3,5 @@ pandas
 scipy
 Plotly
 Seaborn
+pymongo
+beautifulsoup4
