@@ -1,6 +1,6 @@
+scipy
 numpy
 pandas
-scipy
 Plotly
 Seaborn
 pymongo
