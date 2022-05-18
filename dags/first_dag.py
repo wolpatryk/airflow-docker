@@ -73,7 +73,9 @@ def function_3():
         for name in files:
             image_path = os.path.join(f"{root}/{name}")
             images.append(image_path)
+
     L = [f for f in os.listdir(source_dir) if os.path.splitext(f)[1] in extensions]
+
     for f in L:
         try:
             source_file = f"{source_dir}/{f}"
