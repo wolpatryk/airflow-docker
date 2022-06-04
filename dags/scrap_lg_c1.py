@@ -59,6 +59,9 @@ default_args = {
 with DAG(
     # [BEGIN DAG CONFIG]
     dag_id='scrap_lg_c1',
+    description="""
+    scrap LG C1 prices - https://www.ceneo.pl/103735224 - https://cloud.mongodb.com/v2/627a7d2327b4b12d965c137d#metrics/replicaSet/627a7e81c204d34e8d6d7a68/explorer/lg/c1/find 
+    """,
     schedule_interval="0 * * * *",
     start_date=pendulum.datetime(2022, 5, 10, tz="Europe/Warsaw"),
     max_active_runs=1,

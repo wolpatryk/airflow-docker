@@ -98,6 +98,9 @@ default_args = {
 with DAG(
     # [BEGIN DAG CONFIG]
     dag_id='transform_images',
+    description="""
+    Converts images to jpg and moves to different folder
+    """,
     schedule_interval='0 * * * *',
     start_date=pendulum.datetime(2022, 4, 24, tz="Europe/Warsaw"),
     max_active_runs=1,
