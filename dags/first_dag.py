@@ -47,24 +47,32 @@ def function_2(ti):
     output_folder = f"/opt/airflow/images/ame"
 
     print('data in transform')
-    images_to_transform = []
-    for root, dirs, files in os.walk(source_folder, topdown = True):
-        for name in files:
-            images_to_transform.append(name)
 
-    images_to_transform = [image for image in images_to_transform if image.endswith(".webp")]
-    for img in images_to_transform:
-        source_img = f"{source_folder}/{img}"
-        im = Image.open(source_img).convert("RGB")
-        output = f"{output_folder}/{img.split('.webp')[0]}.jpg"
-        im.save(output)
-        os.remove(source_img)
+    for tmp_ext in ['.jpeg', '.JPEG', '.jpg', '.JPG', '.PNG', '.png', '.jfif', '.JFIF', '.webp', '.WEBP']:
+        images_to_transform = []
+        for root, dirs, files in os.walk(source_folder, topdown = True):
+            for name in files:
+                images_to_transform.append(name)
+
+
+        try:
+            images_to_transform = [image for image in images_to_transform if image.endswith(tmp_ext)]
+
+            for img in images_to_transform:
+                source_img = f"{source_folder}/{img}"
+                im = Image.open(source_img).convert("RGB")
+                output = f"{output_folder}/{img.split(tmp_ext)[0]}.jpg"
+                im.save(output)
+                os.remove(source_img)
+        except Exception as e:
+            print("Exception while image convertion:")
+            print(e)
 
     print('done')
     print('@'*40)
 
 def function_3():
-    extensions = ['.jpeg', '.JPEG', '.jpg', '.JPG', '.PNG', '.png']
+    extensions = ['.jpeg', '.JPEG', '.jpg', '.JPG', '.PNG', '.png', '.jfif', '.JFIF']
     source_dir = f"/opt/airflow/images/source"
     output_dir = f"/opt/airflow/images/ame"
 
@@ -73,7 +81,9 @@ def function_3():
         for name in files:
             image_path = os.path.join(f"{root}/{name}")
             images.append(image_path)
-
+    print('@' * 40)
+    print(images)
+    print('@'*40)
     L = [f for f in os.listdir(source_dir) if os.path.splitext(f)[1] in extensions]
 
     for f in L:
@@ -86,6 +96,20 @@ def function_3():
             new_name = fr"{source_file}-{str(uuid.uuid4())}.{ext}"
             os.rename(old_name, new_name)
             shutil.move(f"{new_name}", output_dir)
+
+
+# def function_4():
+#     # make a backup
+#     import subprocess
+#     src_path = f"/opt/airflow/images/ame"
+#     dst_path = f"/opt/airflow/images/ame_backup"
+#
+#     # subprocess.call(['xcopy', "/d", "/y", src_path, dst_path])
+#
+#     import shutil
+#
+#     # shutil.copytree('bar', 'foo')
+#     shutil.copytree(src_path, dst_path, dirs_exist_ok = True)
 
 
 
@@ -137,6 +161,11 @@ with DAG(
         python_callable = function_3,
     )
 
+    # fun_4 = PythonOperator(
+    #     task_id = 'function_4',
+    #     python_callable = function_4,
+    # )
+
     # [END fun_3]
 
     # run external DAG
@@ -147,6 +176,7 @@ with DAG(
     # )
     # [PIPELINE ORDER]
     fun_1 >> fun_2 >> fun_3
+    # fun_1 >> fun_2 >> fun_3 >> fun_4
     # fun_1 >> fun_2 >> fun_3 >> trigger
 
 
