@@ -28,7 +28,6 @@ Natomiast jeśli pakiety nadal nie będą zainstalowane, należy usunąć stary 
 
 localhost:8080
 airflow
-airflow
 
 localhost:5555
 
